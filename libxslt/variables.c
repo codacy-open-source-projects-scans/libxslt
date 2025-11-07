@@ -641,11 +641,6 @@ xsltFreeStackElemList(xsltStackElemPtr elem) {
  *
  * Locate an element in the stack based on its name.
  */
-#if 0 /* TODO: Those seem to have been used for debugging. */
-static int stack_addr = 0;
-static int stack_cmp = 0;
-#endif
-
 static xsltStackElemPtr
 xsltStackLookup(xsltTransformContextPtr ctxt, const xmlChar *name,
 	        const xmlChar *nameURI) {
@@ -665,9 +660,6 @@ xsltStackLookup(xsltTransformContextPtr ctxt, const xmlChar *name,
 	cur = ctxt->varsTab[i-1];
 	while (cur != NULL) {
 	    if ((cur->name == name) && (cur->nameURI == nameURI)) {
-#if 0
-		stack_addr++;
-#endif
 		return(cur);
 	    }
 	    cur = cur->next;
@@ -686,9 +678,6 @@ xsltStackLookup(xsltTransformContextPtr ctxt, const xmlChar *name,
 	cur = ctxt->varsTab[i-1];
 	while (cur != NULL) {
 	    if ((cur->name == name) && (cur->nameURI == nameURI)) {
-#if 0
-		stack_cmp++;
-#endif
 		return(cur);
 	    }
 	    cur = cur->next;
@@ -1049,6 +1038,7 @@ xsltEvalGlobalVariable(xsltStackElemPtr elem, xsltTransformContextPtr ctxt)
     xmlXPathObjectPtr result = NULL;
     xmlNodePtr oldInst;
     const xmlChar* oldVarName;
+    xsltStackElemPtr oldCtxtVar = ctxt->contextVariable;
 
 #ifdef XSLT_REFACTORED
     xsltStyleBasicItemVariablePtr comp;
@@ -1081,6 +1071,14 @@ xsltEvalGlobalVariable(xsltStackElemPtr elem, xsltTransformContextPtr ctxt)
 #endif
     oldVarName = elem->name;
     elem->name = xsltComputingGlobalVarMarker;
+
+    /*
+     * The "context variable" isn't used for globals, so we must
+     * make sure to set it to NULL.
+     */
+    oldCtxtVar = ctxt->contextVariable;
+    ctxt->contextVariable = NULL;
+
     /*
     * OPTIMIZE TODO: We should consider instantiating global vars/params
     *  on-demand. The vars/params don't need to be evaluated if never
@@ -1250,6 +1248,8 @@ xsltEvalGlobalVariable(xsltStackElemPtr elem, xsltTransformContextPtr ctxt)
     }
 
 error:
+    ctxt->contextVariable = oldCtxtVar;
+
     elem->name = oldVarName;
     ctxt->inst = oldInst;
     if (result != NULL) {
@@ -2295,9 +2295,6 @@ xsltXPathVariableLookup(void *ctxt, const xmlChar *name,
 	for (i = tctxt->varsNr; i > tctxt->varsBase; i--) {
 	    cur = tctxt->varsTab[i-1];
 	    if ((cur->name == name) && (cur->nameURI == ns_uri)) {
-#if 0
-		stack_addr++;
-#endif
 		variable = cur;
 		goto local_variable_found;
 	    }
@@ -2319,9 +2316,6 @@ xsltXPathVariableLookup(void *ctxt, const xmlChar *name,
 		for (i = tctxt->varsNr; i > tctxt->varsBase; i--) {
 		    cur = tctxt->varsTab[i-1];
 		    if ((cur->name == name) && (cur->nameURI == ns_uri)) {
-#if 0
-			stack_cmp++;
-#endif
 			variable = cur;
 			goto local_variable_found;
 		    }

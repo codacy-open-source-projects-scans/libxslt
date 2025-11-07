@@ -1,12 +1,21 @@
+include:
+  - component: "gitlab.gnome.org/GNOME/citemplates/release-service@master"
+    inputs:
+      dist-job-name: "dist"
+      tarball-artifact-path: "libxslt-dist/libxslt-1.1.43.tar.xz"
+
 .test:
   # Reuse libxml2 image
   image: registry.gitlab.gnome.org/gnome/libxml2
+  variables:
+    BASE_CONFIG: "--with-crypto --with-modules --with-debug --with-debugger"
   script:
     - sh .gitlab-ci/test.sh
 
 gcc:
   extends: .test
   variables:
+    CONFIG: "--with-python"
     CFLAGS: "-O2"
 
 gcc:c89:
@@ -67,8 +76,6 @@ mingw:w64-x86_64:shared:
 
 .cmake:linux:
   image: registry.gitlab.gnome.org/gnome/libxml2
-  variables:
-    CMAKE_OPTIONS: -DLIBXSLT_WITH_CRYPTO=ON
   script:
     - sh .gitlab-ci/test_cmake.sh
   artifacts:
@@ -163,6 +170,7 @@ cmake:mingw:w64-x86_64:static:
   tags:
     - win32-ps
   variables:
+    CFLAGS: /WX /wd4090
     CMAKE_VERSION: 3.19.4
   before_script:
     - "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12"
@@ -205,8 +213,8 @@ cmake:mingw:w64-x86_64:static:
 .cmake:msvc:v141:
   extends: .cmake:msvc
   variables:
-    CMAKE_GENERATOR: Visual Studio 15 2017
-    CMAKE_GENERATOR_TOOLSET: v141
+    CMAKE_GENERATOR: Visual Studio 16 2019
+    CMAKE_GENERATOR_TOOLSET: v142
 
 .cmake:msvc:v141:x64:
   extends: .cmake:msvc:v141
@@ -247,6 +255,16 @@ cmake:msvc:v141:x86:static:
   variables:
     BUILD_SHARED_LIBS: "OFF"
     SUFFIX: static
+
+dist:
+  image: registry.gitlab.gnome.org/gnome/libxml2
+  script:
+    - sh .gitlab-ci/dist.sh
+  artifacts:
+    paths:
+      - libxslt-dist/*.tar.xz
+  variables:
+    CONFIG: "--with-python"
 
 pages:
   script:

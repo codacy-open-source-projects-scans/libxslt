@@ -3,7 +3,7 @@ AC_PREREQ(2.63)
 
 m4_define([MAJOR_VERSION], [1])
 m4_define([MINOR_VERSION], [1])
-m4_define([MICRO_VERSION], [42])
+m4_define([MICRO_VERSION], [44])
 
 AC_INIT([libxslt], [MAJOR_VERSION.MINOR_VERSION.MICRO_VERSION])
 AC_CONFIG_SRCDIR([libxslt/xslt.c])
@@ -21,7 +21,7 @@ LIBXSLT_MINOR_VERSION=MINOR_VERSION
 LIBXSLT_MICRO_VERSION=MICRO_VERSION
 LIBEXSLT_MAJOR_VERSION=0
 LIBEXSLT_MINOR_VERSION=8
-LIBEXSLT_MICRO_VERSION=23
+LIBEXSLT_MICRO_VERSION=25
 LIBXML_REQUIRED_VERSION=2.6.27
 
 
@@ -252,10 +252,10 @@ AC_SUBST(LIBGCRYPT_CFLAGS)
 AC_SUBST(LIBGCRYPT_LIBS)
 
 AC_ARG_WITH(debug, [  --with-debug            Add the debugging code (on)])
-if test "$with_debug" = "no" ; then
-    echo Disabling debug support
+if test "$with_debug" != "yes" ; then
     WITH_XSLT_DEBUG=0
 else    
+    echo Enabling debug support
     WITH_XSLT_DEBUG=1
 fi
 AC_SUBST(WITH_XSLT_DEBUG)
@@ -264,8 +264,7 @@ dnl
 dnl Is debugger support requested
 dnl
 AC_ARG_WITH(debugger, [  --with-debugger        Add the debugging support (on)])
-if test "$with_debugger" = "no" ; then
-    echo Disabling debugger
+if test "$with_debugger" != "yes" ; then
     WITH_DEBUGGER=0
 else
     echo Enabling debugger

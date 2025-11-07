@@ -38,7 +38,7 @@ if(NOT TARGET LibXml2)
 endif()
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
-option(LIBXSLT_WITH_DEBUGGER "Add the debugging support" ON)
+option(LIBXSLT_WITH_DEBUGGER "Add the debugging support" OFF)
 option(LIBXSLT_WITH_CRYPTO "Add crypto support to exslt" OFF)
 option(LIBXSLT_WITH_MODULES "Add plugin extension support" OFF)
 option(LIBXSLT_WITH_PROFILER "Add the profiling support" ON)
@@ -47,7 +47,7 @@ option(LIBXSLT_WITH_PYTHON "Build Python bindings" ON)
 option(LIBXSLT_WITH_TESTS "Build tests" ON)
 option(LIBXSLT_WITH_THREADS "Add multithread support" ON)
 set(LIBXSLT_WITH_TRIO OFF)
-option(LIBXSLT_WITH_XSLT_DEBUG "Add the debugging code" ON)
+option(LIBXSLT_WITH_XSLT_DEBUG "Add the debugging code" OFF)
 
 if(NOT BUILD_SHARED_LIBS)
 	set(LIBXSLT_WITH_MODULES OFF)
@@ -444,7 +444,7 @@ if(LIBXSLT_WITH_PYTHON)
 	file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/libxslt.py.in "${LIBXSLTCLASS_PY}")
 	configure_file(${CMAKE_CURRENT_BINARY_DIR}/libxslt.py.in libxslt.py COPYONLY)
 	add_library(
-		LibXsltMod
+		LibXsltMod SHARED
 		libxslt-py.c
 		libxslt-py.h
 		python/libxml_wrap.h
@@ -506,7 +506,7 @@ install(
 write_basic_package_version_file(
 	${CMAKE_CURRENT_BINARY_DIR}/libxslt-config-version.cmake
 	VERSION ${PROJECT_VERSION}
-	COMPATIBILITY ExactVersion
+        COMPATIBILITY SameMajorVersion
 )
 
 install(

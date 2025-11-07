@@ -1,7 +1,19 @@
-# libxslt - master branch
+# libxslt
 
-This repository contains the frozen state of the repository.
-Its history is cleared. It is used only for static code
-analysis with Codacy.
+libxslt is an XSLT processor based on libxml2.
 
-Commit Time: 1729392156
+Official releases can be downloaded from
+<https://download.gnome.org/sources/libxslt/>
+
+The git repository is hosted on GNOME's GitLab server:
+<https://gitlab.gnome.org/GNOME/libxslt>
+
+Bugs should be reported at
+<https://gitlab.gnome.org/GNOME/libxslt/-/issues>
+
+Documentation is available at
+<https://gitlab.gnome.org/GNOME/libxslt/-/wikis>
+
+The build system is similar to libxml2. Refer to libxml2's README for
+build instructions.
+

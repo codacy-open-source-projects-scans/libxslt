@@ -20,14 +20,8 @@ extensions.</description>
 
   <maintainer>
     <foaf:Person>
-      <foaf:name>Daniel Veillard</foaf:name>
-      <gnome:userid>veillard</gnome:userid>
-    </foaf:Person>
-  </maintainer>
-  <maintainer>
-    <foaf:Person>
-      <foaf:name>Nick Wellnhofer</foaf:name>
-      <gnome:userid>nwellnhof</gnome:userid>
+      <foaf:name>Iván Chavero</foaf:name>
+      <gnome:userid>ichavero</gnome:userid>
     </foaf:Person>
   </maintainer>
 </Project>
